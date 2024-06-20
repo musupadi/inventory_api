@@ -1,9 +1,16 @@
 package Model
 
 type User struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
+	Id_user      string `json:"id_user"`
+	Username     string `json:"username"`
+	Email        string `json:"email"`
+	Name         string `json:"name"`
+	Department   string `json:"department"`
+	Phone_number string `json:"phone_number"`
+	Id_role      string `json:"id_role"`
+	Role         string `json:"role"`
+	Photo        string `json:"photo"`
+	Status       string `json:"status"`
 }
 type UserData struct {
 	Id            string `json:"id"`

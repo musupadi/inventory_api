@@ -29,15 +29,22 @@ func Login(c *gin.Context) {
 
 	// Query SQL dengan placeholder parameterized
 	query := squirrel.Select(
-		"username",
-		"password",
-		"name",
-	).From("m_user").
-		// Join("role b ON a.id_role = b.id").
+		"a.id as id_user",
+		"a.username",
+		"a.email",
+		"a.name",
+		"a.department",
+		"a.phone_number",
+		"a.id_role",
+		"b.label as role",
+		"a.photo",
+		"a.status",
+	).From("m_user as a").
+		Join("m_role b ON a.id_role = b.id").
 		// Join("shop c ON a.id_shop = c.id").
 		Where(squirrel.Eq{
-			"username": username,
-			"password": hashedPasswordStr,
+			"a.username": username,
+			"a.password": hashedPasswordStr,
 		})
 	// query := "SELECT a.username, a.name,a.email,a.jenis_kelamin,a.kontak,a.id_role,b.label as role_name,b.level,a.photo,a.id_shop,c.label as shop_name FROM user as a JOIN role as b ON a.id_role = b.id JOIN shop c ON a.id_shop = c.id WHERE username = ? AND password = ?"
 
@@ -61,9 +68,17 @@ func Login(c *gin.Context) {
 	for rows.Next() {
 		var userData Model.User
 		if err := rows.Scan(
+			&userData.Id_user,
 			&userData.Username,
-			&userData.Password,
-			&userData.Name); err != nil {
+			&userData.Email,
+			&userData.Name,
+			&userData.Department,
+			&userData.Phone_number,
+			&userData.Id_role,
+			&userData.Role,
+			&userData.Photo,
+			&userData.Status,
+		); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
